@@ -23,9 +23,11 @@ import {
 import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import * as z from "zod";
+import { Resolver } from "react-hook-form"; // Add this import
 import { Checkbox } from "@/components/ui/checkbox";
 import { Alert, AlertDescription, AlertTitle } from "@/components/ui/alert";
 import { AlertCircle } from "lucide-react";
+
 import {
   Command,
   CommandEmpty,
@@ -240,21 +242,16 @@ Wawasan,KJ33,5Kelana Jaya Line,Rapid Rail,LRT`;
 const stations = parseCSVData(csvData);
 
 // Form schema with validation
-const formSchema = z
-  .object({
-    origin: z.string({
-      required_error: "Please select an origin station.",
-    }),
-    destination: z.string({
-      required_error: "Please select a destination station.",
-    }),
-    return: z.boolean().default(false),
-    concession: z.boolean().default(false),
-  })
-  .refine((data) => data.origin !== data.destination, {
-    message: "Origin and destination cannot be the same",
-    path: ["destination"],
-  });
+const formSchema = z.object({
+  origin: z.string({
+    required_error: "Please select an origin station.",
+  }),
+  destination: z.string({
+    required_error: "Please select a destination station.",
+  }),
+  return: z.boolean().default(false),
+  concession: z.boolean().default(false),
+});
 
 // Interface for fare result
 interface FareResult {
@@ -269,6 +266,14 @@ interface FareResult {
   shouldBuyDailyPass?: boolean;
 }
 
+// Define the form values type explicitly
+type FormValues = {
+  origin: string;
+  destination: string;
+  return: boolean;
+  concession: boolean;
+};
+
 export function TrainFareCalculator() {
   const [fareResult, setFareResult] = useState<FareResult | null>(null);
   const [isLoading, setIsLoading] = useState<boolean>(false);
@@ -277,10 +282,14 @@ export function TrainFareCalculator() {
   const [originOpen, setOriginOpen] = useState(false);
   const [destinationOpen, setDestinationOpen] = useState(false);
 
-  const form = useForm<z.infer<typeof formSchema>>({
-    resolver: zodResolver(formSchema),
+  // Use the explicit FormValues type instead of z.infer
+  const form = useForm<FormValues>({
+    resolver: zodResolver(formSchema) as Resolver<FormValues>,
     defaultValues: {
+      origin: "",
+      destination: "",
       return: false,
+      concession: false,
     },
   });
 
@@ -308,7 +317,8 @@ export function TrainFareCalculator() {
     }
   };
 
-  async function onSubmit(values: z.infer<typeof formSchema>) {
+  // Ensure onSubmit uses the explicit FormValues type
+  async function onSubmit(values: FormValues) {
     const originStation = stations.find((s) => s.code === values.origin);
     const destinationStation = stations.find(
       (s) => s.code === values.destination
@@ -373,6 +383,7 @@ export function TrainFareCalculator() {
         </CardHeader>
         <CardContent>
           <Form {...form}>
+            {/* Pass the correctly typed onSubmit to handleSubmit */}
             <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-4">
               <FormField
                 control={form.control}
@@ -548,7 +559,7 @@ export function TrainFareCalculator() {
                       <FormLabel>I have a concession card</FormLabel>
                       <FormDescription>
                         Select if you&apos;re eligible for concession fare
-                        (student, senior citizen, etc.)
+                        (student and senior citizen)
                       </FormDescription>
                     </div>
                   </FormItem>
