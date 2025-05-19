@@ -1,36 +1,79 @@
-This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-app`](https://nextjs.org/docs/app/api-reference/cli/create-next-app).
+# Should I buy a daily pass?
 
-## Getting Started
+## Overview
 
-First, run the development server:
+A modern, user-friendly web application that helps commuters calculate fares for RapidKL train journeys in Kuala Lumpur. This tool simplifies trip planning by providing accurate fare information and recommending when to purchase a daily pass for better value.
+
+## Features
+
+- **Station Selection**: Choose from a comprehensive list of RapidKL train stations
+- **Real-time Fare Calculation**: Instantly view fares based on official RapidKL rates
+- **Return Journey Calculation**: Calculate round-trip costs with one click
+- **Concession Support**: Special pricing for students and senior citizens
+- **Daily Pass Recommendation**: Smart suggestions for when to purchase a daily pass
+- **Responsive Design**: Works on desktop and mobile devices
+- **Dark/Light Mode**: Choose your preferred theme
+
+## Screenshots
+
+![Calculator Interface](/public/screenshot-calculator.png)
+![Fare Results](/public/screenshot-results.png)
+
+## Technology Stack
+
+- **Frontend**: Next.js, React, TypeScript
+- **UI Components**: Shadcn UI
+- **Form Management**: React Hook Form with Zod validation
+- **Styling**: Tailwind CSS
+
+## Development
+
+### Prerequisites
+
+- Node.js 18.x or higher
+- npm or yarn
+
+### Installation
+
+1. Clone this repository
+
+```bash
+git clone https://github.com/yourusername/fare-calculator.git
+cd fare-calculator
+```
+
+2. Install dependencies
+
+```bash
+npm install
+# or
+yarn install
+```
+
+3. Start the development server
 
 ```bash
 npm run dev
 # or
 yarn dev
-# or
-pnpm dev
-# or
-bun dev
 ```
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+4. Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
 
-You can start editing the page by modifying `app/page.tsx`. The page auto-updates as you edit the file.
+## How It Works
 
-This project uses [`next/font`](https://nextjs.org/docs/app/building-your-application/optimizing/fonts) to automatically optimize and load [Geist](https://vercel.com/font), a new font family for Vercel.
+The application fetches real-time fare data from the RapidKL API. When users select origin and destination stations, the app:
 
-## Learn More
+1. Retrieves fare information for different payment methods (cash, cashless, concession)
+2. Calculates return journey costs when applicable
+3. Analyzes whether purchasing a daily pass (RM6) would be more economical
+4. Displays a clear breakdown of all applicable fares
 
-To learn more about Next.js, take a look at the following resources:
+## Usage
 
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
-
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js) - your feedback and contributions are welcome!
-
-## Deploy on Vercel
-
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
-
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/app/building-your-application/deploying) for more details.
+1. Select your origin station from the dropdown
+2. Select your destination station
+3. Toggle "Return" if you're planning a round trip
+4. Toggle "I have a concession card" if applicable
+5. Click "Calculate Fare"
+6. View the detailed fare breakdown and daily pass recommendation
