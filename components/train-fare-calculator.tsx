@@ -547,8 +547,8 @@ export function TrainFareCalculator() {
                     <div className="space-y-1 leading-none">
                       <FormLabel>I have a concession card</FormLabel>
                       <FormDescription>
-                        Select if you're eligible for concession fare (student,
-                        senior citizen, etc.)
+                        Select if you&apos;re eligible for concession fare
+                        (student, senior citizen, etc.)
                       </FormDescription>
                     </div>
                   </FormItem>
