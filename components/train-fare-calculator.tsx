@@ -113,7 +113,7 @@ Cyberjaya Utara,PY39,12Putrajaya Line,Rapid Rail,MRT
 Damai,KJ8,5Kelana Jaya Line,Rapid Rail,LRT
 Damansara Damai,PY05,12Putrajaya Line,Rapid Rail,MRT
 Dang Wangi,KJ12,5Kelana Jaya Line,Rapid Rail,LRT
-Dato'' Keramat,KJ7,5Kelana Jaya Line,Rapid Rail,LRT
+Dato Keramat,KJ7,5Kelana Jaya Line,Rapid Rail,LRT
 Glenmarie,KJ27,5Kelana Jaya Line,Rapid Rail,LRT
 Gombak,KJ1,5Kelana Jaya Line,Rapid Rail,LRT
 Hang Tuah,AG9,3Ampang Line,Rapid Rail,LRT
