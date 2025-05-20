@@ -587,43 +587,45 @@ export function TrainFareCalculator() {
       )}
 
       {fareResult && (
-        <Card className="bg-zinc-900 text-white">
+        <Card className="bg-card border">
           <CardHeader>
             <div className="flex items-center justify-between">
-              <CardTitle className="text-lg">Fare Result</CardTitle>
+              <CardTitle className="text-lg">Fare</CardTitle>
               <Train className="h-5 w-5 text-primary" />
             </div>
           </CardHeader>
           <CardContent className="pt-6">
             <div className="space-y-5">
               <div className="flex justify-between">
-                <span className="text-zinc-400">Journey:</span>
+                <span className="text-muted-foreground">Journey:</span>
                 <span className="font-medium">
                   {fareResult.origin} to {fareResult.destination}
                 </span>
               </div>
               <div className="flex justify-between">
-                <span className="text-zinc-400">Journey Type:</span>
+                <span className="text-muted-foreground">Journey Type:</span>
                 <span className="font-medium">
                   {fareResult.isReturn ? "Return" : "One-way"}
                   {fareResult.isConcession ? ", Concession" : ""}
                 </span>
               </div>
-              <div className="border-t border-zinc-700 my-4 pt-4 space-y-3">
+              <div className="border-t my-4 pt-4 space-y-3">
                 <div className="flex justify-between items-center">
-                  <span className="text-zinc-400">Cash Fare:</span>
+                  <span className="text-muted-foreground">Cash Fare:</span>
                   <span className="text-lg font-bold">
                     RM {fareResult.cash}
                   </span>
                 </div>
                 <div className="flex justify-between items-center">
-                  <span className="text-zinc-400">Cashless Fare:</span>
+                  <span className="text-muted-foreground">Cashless Fare:</span>
                   <span className="text-lg font-bold">
                     RM {fareResult.cashless}
                   </span>
                 </div>
                 <div className="flex justify-between items-center">
-                  <span className="text-zinc-400">Concession Fare:</span>
+                  <span className="text-muted-foreground">
+                    Concession Fare:
+                  </span>
                   <span className="text-lg font-bold">
                     RM {fareResult.concession}
                   </span>
@@ -631,12 +633,12 @@ export function TrainFareCalculator() {
               </div>
 
               {fareResult.shouldBuyDailyPass && (
-                <Alert className="mt-4 bg-green-900 border-green-700">
-                  <AlertCircle className="h-4 w-4 text-green-400" />
-                  <AlertTitle className="text-green-400 font-medium">
+                <Alert className="mt-4 bg-green-50 dark:bg-green-900 border-green-200 dark:border-green-700">
+                  <AlertCircle className="h-4 w-4 text-green-600 dark:text-green-400" />
+                  <AlertTitle className="text-green-800 dark:text-green-400 font-medium">
                     YOU SHOULD BUY A DAILY PASS!
                   </AlertTitle>
-                  <AlertDescription className="text-green-300">
+                  <AlertDescription className="text-green-700 dark:text-green-300">
                     Your {fareResult.isConcession ? "concession" : "cashless"}{" "}
                     fare exceeds RM 6.00. Consider purchasing a daily pass for
                     better value!
@@ -645,7 +647,7 @@ export function TrainFareCalculator() {
               )}
             </div>
           </CardContent>
-          <CardFooter className="bg-zinc-900 text-xs text-zinc-400">
+          <CardFooter className="text-xs text-muted-foreground">
             Fares are based on RapidKL official rates. Return tickets are
             calculated as double the one-way fare.
           </CardFooter>
