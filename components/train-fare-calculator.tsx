@@ -641,7 +641,7 @@ export function TrainFareCalculator() {
                   <AlertDescription className="text-green-700 dark:text-green-300">
                     Your {fareResult.isConcession ? "concession" : "cashless"}{" "}
                     fare exceeds RM 6.00. Consider purchasing a daily pass for
-                    better value!
+                    better value! (Malaysian only)
                   </AlertDescription>
                 </Alert>
               )}
