@@ -597,7 +597,7 @@ export function TrainFareCalculator() {
           <CardContent className="pt-6">
             <div className="space-y-5">
               <div className="flex justify-between">
-                <span className="text-muted-foreground">Journey:</span>
+                <span className="text-muted-foreground">Journey:{"\n"}</span>
                 <span className="font-medium">
                   {fareResult.origin} to {fareResult.destination}
                 </span>
