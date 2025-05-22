@@ -27,6 +27,7 @@ import { Resolver } from "react-hook-form"; // Add this import
 import { Checkbox } from "@/components/ui/checkbox";
 import { Alert, AlertDescription, AlertTitle } from "@/components/ui/alert";
 import { AlertCircle } from "lucide-react";
+import { Badge } from "@/components/ui/badge"; // Import Badge component
 
 import {
   Command,
@@ -73,6 +74,35 @@ const parseCSVData = (csvData: string) => {
   });
 
   return stations.sort((a, b) => a.name.localeCompare(b.name));
+};
+
+// Helper function to determine train type from station code
+const getTrainType = (code: string) => {
+  // First two characters determine the line type
+  const prefix = code.substring(0, 2);
+
+  switch (prefix) {
+    case "AG":
+      return { type: "LRT", color: "bg-amber-500 hover:bg-amber-600" }; // Ampang Line (3): #FF9900 (Orange)
+    case "SP":
+      return { type: "LRT", color: "bg-red-900 hover:bg-red-950" }; // Sri Petaling Line (4): #B3003B (Maroon/Dark Red)
+    case "KJ":
+      return { type: "LRT", color: "bg-fuchsia-600 hover:bg-fuchsia-700" }; // Kelana Jaya Line (5): #CC0099 (Pink/Magenta)
+    case "KE":
+      return { type: "ERL", color: "bg-purple-700 hover:bg-purple-800" }; // KLIA Ekspres Line (6): #663399 (Purple)
+    case "KL":
+      return { type: "ERL", color: "bg-teal-600 hover:bg-teal-700" }; // KLIA Transit Line (7): #009999 (Teal/Cyan)
+    case "MR":
+      return { type: "Monorail", color: "bg-lime-600 hover:bg-lime-700" }; // KL Monorail Line (8): #66CC33 (Green)
+    case "KG":
+      return { type: "MRT", color: "bg-green-800 hover:bg-green-900" }; // Kajang Line (9): #006600 (Dark Green)
+    case "PY":
+      return { type: "MRT", color: "bg-yellow-300 hover:bg-yellow-400" }; // Putrajaya Line (12): #FFFF00 (Yellow)
+    case "SH":
+      return { type: "LRT", color: "bg-cyan-500 hover:bg-cyan-600" }; // Shah Alam Line (11): #33CCCC (Light Blue)
+    default:
+      return { type: "Train", color: "bg-gray-500 hover:bg-gray-600" };
+  }
 };
 
 // CSV data copied from allstation.csv
@@ -429,12 +459,23 @@ export function TrainFareCalculator() {
                                   className="flex items-center text-sm"
                                 >
                                   <span>{station.name}</span>
-                                  <span className="text-xs text-muted-foreground ml-1">
-                                    ({station.code})
-                                  </span>
+                                  <div className="ml-auto flex items-center gap-1">
+                                    <span className="text-xs text-muted-foreground mr-1">
+                                      {station.code}
+                                    </span>
+                                    <Badge
+                                      variant="secondary"
+                                      className={cn(
+                                        "text-xs font-normal text-white",
+                                        getTrainType(station.code).color
+                                      )}
+                                    >
+                                      {getTrainType(station.code).type}
+                                    </Badge>
+                                  </div>
                                   <Check
                                     className={cn(
-                                      "ml-auto h-4 w-4",
+                                      "ml-2 h-4 w-4",
                                       field.value === station.code
                                         ? "opacity-100"
                                         : "opacity-0"
@@ -499,12 +540,23 @@ export function TrainFareCalculator() {
                                   className="flex items-center text-sm"
                                 >
                                   <span>{station.name}</span>
-                                  <span className="text-xs text-muted-foreground ml-1">
-                                    ({station.code})
-                                  </span>
+                                  <div className="ml-auto flex items-center gap-1">
+                                    <span className="text-xs text-muted-foreground mr-1">
+                                      {station.code}
+                                    </span>
+                                    <Badge
+                                      variant="secondary"
+                                      className={cn(
+                                        "text-xs font-normal text-white",
+                                        getTrainType(station.code).color
+                                      )}
+                                    >
+                                      {getTrainType(station.code).type}
+                                    </Badge>
+                                  </div>
                                   <Check
                                     className={cn(
-                                      "ml-auto h-4 w-4",
+                                      "ml-2 h-4 w-4",
                                       field.value === station.code
                                         ? "opacity-100"
                                         : "opacity-0"
