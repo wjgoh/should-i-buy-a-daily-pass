@@ -1,7 +1,7 @@
 "use client";
 
-import { useState } from "react";
-import { Train, Check, ChevronsUpDown } from "lucide-react";
+import { useState, useEffect } from "react";
+import { Train, Check, ChevronsUpDown, Share2 } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import {
   Card,
@@ -154,10 +154,25 @@ type FormValues = {
   concession: boolean;
 };
 
-export function TrainFareCalculator() {
+// Define props interface for the component
+interface TrainFareCalculatorProps {
+  initialOrigin?: string;
+  initialDestination?: string;
+  initialReturn?: boolean;
+  initialConcession?: boolean;
+}
+
+export function TrainFareCalculator({
+  initialOrigin = "",
+  initialDestination = "",
+  initialReturn = false,
+  initialConcession = false,
+}: TrainFareCalculatorProps) {
   const [fareResult, setFareResult] = useState<FareResult | null>(null);
   const [isLoading, setIsLoading] = useState<boolean>(false);
   const [error, setError] = useState<string | null>(null);
+  const [showShareNotification, setShowShareNotification] =
+    useState<boolean>(false);
 
   const [originOpen, setOriginOpen] = useState(false);
   const [destinationOpen, setDestinationOpen] = useState(false);
@@ -166,12 +181,75 @@ export function TrainFareCalculator() {
   const form = useForm<FormValues>({
     resolver: zodResolver(formSchema) as Resolver<FormValues>,
     defaultValues: {
-      origin: "",
-      destination: "",
-      return: false,
-      concession: false,
+      origin: initialOrigin,
+      destination: initialDestination,
+      return: initialReturn,
+      concession: initialConcession,
     },
   });
+
+  // Generate shareable URL when form values change
+  const generateShareURL = () => {
+    const values = form.getValues();
+    const params = new URLSearchParams();
+
+    if (values.origin) params.append("origin", values.origin);
+    if (values.destination) params.append("destination", values.destination);
+    if (values.return) params.append("return", "true");
+    if (values.concession) params.append("concession", "true");
+
+    const url = `${window.location.origin}${
+      window.location.pathname
+    }?${params.toString()}`;
+    return url;
+  };
+
+  // Function to handle share button click
+  const handleShareClick = () => {
+    const url = generateShareURL();
+
+    // Try to use Web Share API if available
+    if (navigator.share) {
+      navigator
+        .share({
+          title: "RapidKL Fare Calculator",
+          text: "Check this journey fare",
+          url: url,
+        })
+        .catch((err) => {
+          console.log("Sharing failed", err);
+          // Fall back to clipboard
+          copyToClipboard(url);
+        });
+    } else {
+      // Fallback for browsers without share API
+      copyToClipboard(url);
+    }
+  };
+
+  // Function to copy URL to clipboard
+  const copyToClipboard = (text: string) => {
+    navigator.clipboard
+      .writeText(text)
+      .then(() => {
+        setShowShareNotification(true);
+        setTimeout(() => setShowShareNotification(false), 3000);
+      })
+      .catch((err) => console.error("Failed to copy: ", err));
+  };
+
+  // Auto-calculate fare if both origin and destination are provided via URL params
+  useEffect(() => {
+    if (initialOrigin && initialDestination) {
+      // Validate that the station codes exist
+      const originValid = stations.some((s) => s.code === initialOrigin);
+      const destValid = stations.some((s) => s.code === initialDestination);
+
+      if (originValid && destValid) {
+        form.handleSubmit(onSubmit)();
+      }
+    }
+  }, [initialOrigin, initialDestination]);
 
   // Function to fetch fares from RapidKL API
   const fetchFares = async (originCode: string, destinationCode: string) => {
@@ -472,17 +550,44 @@ export function TrainFareCalculator() {
                 )}
               />
 
-              <Button
-                type="submit"
-                className="w-full mt-6"
-                disabled={isLoading}
-              >
-                {isLoading ? "Calculating..." : "Calculate Fare"}
-              </Button>
+              <div className="flex gap-2">
+                <Button
+                  type="submit"
+                  className="flex-1 mt-6"
+                  disabled={isLoading}
+                >
+                  {isLoading ? "Calculating..." : "Calculate Fare"}
+                </Button>
+
+                {fareResult && (
+                  <Button
+                    type="button"
+                    variant="outline"
+                    className="mt-6"
+                    onClick={handleShareClick}
+                    title="Share this journey"
+                  >
+                    <Share2 className="h-4 w-4" />
+                  </Button>
+                )}
+              </div>
             </form>
           </Form>
         </CardContent>
       </Card>
+
+      {/* Show notification when URL is copied */}
+      {showShareNotification && (
+        <Alert className="bg-green-50 dark:bg-green-900 border-green-200 dark:border-green-700">
+          <Check className="h-4 w-4 text-green-600 dark:text-green-400" />
+          <AlertTitle className="text-green-800 dark:text-green-400 font-medium">
+            URL copied to clipboard!
+          </AlertTitle>
+          <AlertDescription className="text-green-700 dark:text-green-300">
+            Share this link to show this journey fare calculation.
+          </AlertDescription>
+        </Alert>
+      )}
 
       {error && (
         <Card className="bg-red-50 dark:bg-red-950">
