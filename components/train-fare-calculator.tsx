@@ -100,9 +100,21 @@ const getTrainType = (code: string) => {
       return { type: "MRT", color: "bg-yellow-300 hover:bg-yellow-400" }; // Putrajaya Line (12): #FFFF00 (Yellow)
     case "SH":
       return { type: "LRT", color: "bg-cyan-500 hover:bg-cyan-600" }; // Shah Alam Line (11): #33CCCC (Light Blue)
+    case "SB":
+      return { type: "BRT", color: "bg-emerald-900 hover:bg-emerald-950" }; // BRT Sunway Line: #005522 (Dark Green)
     default:
       return { type: "Train", color: "bg-gray-500 hover:bg-gray-600" };
   }
+};
+
+// Function to convert SB_ code to BRT_ code for API calls
+const convertToBRTCode = (code: string): string => {
+  if (code.startsWith("SB")) {
+    // Extract the number part and convert SB to BRT
+    const numberPart = code.substring(2);
+    return `BRT${numberPart}`;
+  }
+  return code;
 };
 
 // CSV data copied from allstation.csv
@@ -182,6 +194,7 @@ Masjid Jamek,AG7,3Ampang Line,Rapid Rail,LRT
 Masjid Jamek,SP7,4Sri Petaling Line,Rapid Rail,LRT
 Masjid Jamek,KJ13,5Kelana Jaya Line,Rapid Rail,LRT
 Medan Tuanku,MR9,8KL Monorail,Rapid Rail,Monorail
+Mentari,SB2,B1BRT Sunway Line,Rapid Bus,BRT
 Merdeka,KG17,9Kajang Line,Rapid Rail,MRT
 Metro Prima,PY09,12Putrajaya Line,Rapid Rail,MRT
 Miharja,AG12,3Ampang Line,Rapid Rail,LRT
@@ -221,6 +234,8 @@ Serdang Jaya,PY33,12Putrajaya Line,Rapid Rail,MRT
 Serdang Raya Selatan,PY32,12Putrajaya Line,Rapid Rail,MRT
 Serdang Raya Utara,PY31,12Putrajaya Line,Rapid Rail,MRT
 Setiawangsa,KJ5,5Kelana Jaya Line,Rapid Rail,LRT
+Setia Jaya (Sunway-Setia Jaya),SB1,B1BRT Sunway Line,Rapid Bus,BRT
+South Quay-USJ 1,SB6,B1BRT Sunway Line,Rapid Bus,BRT
 Sri Damansara Barat,PY06,12Putrajaya Line,Rapid Rail,MRT
 Sri Damansara Sentral,PY07,12Putrajaya Line,Rapid Rail,MRT
 Sri Damansara Timur,PY08,12Putrajaya Line,Rapid Rail,MRT
@@ -235,10 +250,13 @@ Subang Alam,KJ36,5Kelana Jaya Line,Rapid Rail,LRT
 Subang Jaya,KJ28,5Kelana Jaya Line,Rapid Rail,LRT
 Sultan Ismail,AG5,3Ampang Line,Rapid Rail,LRT
 Sultan Ismail,SP5,4Sri Petaling Line,Rapid Rail,LRT
+SunMed,SB4,B1BRT Sunway Line,Rapid Bus,BRT
+SunU-Monash,SB5,B1BRT Sunway Line,Rapid Bus,BRT
 Sungai Besi,PY29,12Putrajaya Line,Rapid Rail,MRT
 Sungai Besi,SP16,4Sri Petaling Line,Rapid Rail,LRT
 Sungai Buloh,PY04,12Putrajaya Line,Rapid Rail,MRT
 Sungai Jernih,KG33,9Kajang Line,Rapid Rail,MRT
+Sunway Lagoon,SB3,B1BRT Sunway Line,Rapid Bus,BRT
 Surian,KG07,9Kajang Line,Rapid Rail,MRT
 Taipan,KJ32,5Kelana Jaya Line,Rapid Rail,LRT
 Taman Bahagia,KJ23,5Kelana Jaya Line,Rapid Rail,LRT
@@ -265,6 +283,7 @@ Universiti,KJ19,5Kelana Jaya Line,Rapid Rail,LRT
 UPM,PY34,12Putrajaya Line,Rapid Rail,MRT
 USJ 21,KJ34,5Kelana Jaya Line,Rapid Rail,LRT
 USJ 7,KJ31,5Kelana Jaya Line,Rapid Rail,LRT
+USJ 7,SB7,B1BRT Sunway Line,Rapid Bus,BRT
 Wangsa Maju,KJ3,5Kelana Jaya Line,Rapid Rail,LRT
 Wawasan,KJ33,5Kelana Jaya Line,Rapid Rail,LRT`;
 
@@ -328,8 +347,12 @@ export function TrainFareCalculator() {
     setIsLoading(true);
     setError(null);
     try {
+      // Convert SB codes to BRT codes for API compatibility
+      const apiFriendlyOriginCode = convertToBRTCode(originCode);
+      const apiFriendlyDestinationCode = convertToBRTCode(destinationCode);
+
       const response = await fetch(
-        `https://jp.mapit.myrapid.com.my/endpoint/geoservice/fares?agency=rapidkl&from=${originCode}&to=${destinationCode}`
+        `https://jp.mapit.myrapid.com.my/endpoint/geoservice/fares?agency=rapidkl&from=${apiFriendlyOriginCode}&to=${apiFriendlyDestinationCode}`
       );
 
       if (!response.ok) {
@@ -651,7 +674,8 @@ export function TrainFareCalculator() {
               <div className="flex justify-between">
                 <span className="text-muted-foreground">Journey:</span>
                 <span className="font-medium">
-                  {"\n"}{fareResult.origin} to {fareResult.destination}
+                  {"\n"}
+                  {fareResult.origin} to {fareResult.destination}
                 </span>
               </div>
               <div className="flex justify-between">
