@@ -1,7 +1,7 @@
 "use client";
 
 import { useState, useEffect } from "react";
-import { Train, Check, ChevronsUpDown, Share2 } from "lucide-react";
+import { Train, Check, ChevronsUpDown, ClipboardCopy } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import {
   Card,
@@ -204,27 +204,10 @@ export function TrainFareCalculator({
     return url;
   };
 
-  // Function to handle share button click
-  const handleShareClick = () => {
+  // Function to handle copy button click
+  const handleCopyClick = () => {
     const url = generateShareURL();
-
-    // Try to use Web Share API if available
-    if (navigator.share) {
-      navigator
-        .share({
-          title: "RapidKL Fare Calculator",
-          text: "Check this journey fare",
-          url: url,
-        })
-        .catch((err) => {
-          console.log("Sharing failed", err);
-          // Fall back to clipboard
-          copyToClipboard(url);
-        });
-    } else {
-      // Fallback for browsers without share API
-      copyToClipboard(url);
-    }
+    copyToClipboard(url);
   };
 
   // Function to copy URL to clipboard
@@ -564,10 +547,10 @@ export function TrainFareCalculator({
                     type="button"
                     variant="outline"
                     className="mt-6"
-                    onClick={handleShareClick}
-                    title="Share this journey"
+                    onClick={handleCopyClick}
+                    title="Copy URL to clipboard"
                   >
-                    <Share2 className="h-4 w-4" />
+                    <ClipboardCopy className="h-4 w-4" />
                   </Button>
                 )}
               </div>
