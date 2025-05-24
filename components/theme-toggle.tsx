@@ -13,8 +13,7 @@ import {
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
 
-export function ThemeToggle() {
-  const { setTheme } = useTheme();
+export function ThemeToggle() {  const { setTheme, theme } = useTheme();
   const [clickCount, setClickCount] = useState(0);
 
   const handleThemeButtonClick = useCallback(() => {
@@ -23,14 +22,17 @@ export function ThemeToggle() {
 
     // Check for Easter egg activation (5 clicks)
     if (newCount === 5) {
-      setTheme("pink");
-      toast.success("🎉 Pink mode activated!", {
-        description: "You found the Easter egg! Enjoy the pink theme!",
-        icon: "💖",
-      });
+      // Only show toast if we're not already in pink mode
+      if (theme !== "pink") {
+        setTheme("pink");
+        toast.success("🎉 Pink mode activated!", {
+          description: "You found the Easter egg! Enjoy the pink theme!",
+          icon: "💖",
+        });
+      }
       setClickCount(0);
     }
-  }, [clickCount, setTheme]);
+  }, [clickCount, setTheme, theme]);
 
   return (
     <DropdownMenu>
