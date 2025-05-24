@@ -2,6 +2,7 @@
 @import "tw-animate-css";
 
 @custom-variant dark (&:is(.dark *));
+@custom-variant pink (&:is(.pink *));
 
 @theme inline {
   --color-background: var(--background);
@@ -112,6 +113,40 @@
   --sidebar-ring: oklch(0.556 0 0);
 }
 
+.pink {
+  --background: oklch(0.95 0.1 320);
+  --foreground: oklch(0.2 0.05 320);
+  --card: oklch(0.93 0.08 320);
+  --card-foreground: oklch(0.2 0.05 320);
+  --popover: oklch(0.93 0.08 320);
+  --popover-foreground: oklch(0.2 0.05 320);
+  --primary: #aa60c8;
+  --primary-foreground: oklch(0.98 0 0);
+  --secondary: #d69ade;
+  --secondary-foreground: oklch(0.2 0.05 320);
+  --muted: #eabde6;
+  --muted-foreground: oklch(0.4 0.05 320);
+  --accent: #ffdfef;
+  --accent-foreground: oklch(0.2 0.05 320);
+  --destructive: oklch(0.577 0.245 27.325);
+  --border: oklch(0.8 0.1 320);
+  --input: oklch(0.8 0.1 320);
+  --ring: #d69ade;
+  --chart-1: #aa60c8;
+  --chart-2: #d69ade;
+  --chart-3: #eabde6;
+  --chart-4: #ffdfef;
+  --chart-5: oklch(0.769 0.188 70.08);
+  --sidebar: oklch(0.93 0.08 320);
+  --sidebar-foreground: oklch(0.2 0.05 320);
+  --sidebar-primary: #aa60c8;
+  --sidebar-primary-foreground: oklch(0.98 0 0);
+  --sidebar-accent: #ffdfef;
+  --sidebar-accent-foreground: oklch(0.2 0.05 320);
+  --sidebar-border: oklch(0.8 0.1 320);
+  --sidebar-ring: #d69ade;
+}
+
 @layer base {
   * {
     @apply border-border outline-ring/50;
@@ -119,4 +154,42 @@
   body {
     @apply bg-background text-foreground;
   }
+}
+
+/* Custom scrollbar styling */
+::-webkit-scrollbar {
+  width: 12px;
+  height: 12px;
+}
+
+::-webkit-scrollbar-track {
+  background: transparent;
+}
+
+::-webkit-scrollbar-thumb {
+  background: var(--border);
+  border: 3px solid var(--background);
+  border-radius: 6px;
+}
+
+::-webkit-scrollbar-thumb:hover {
+  background: var(--primary);
+}
+
+.dark::-webkit-scrollbar-thumb {
+  background: var(--border);
+  border-color: var(--background);
+}
+
+.dark::-webkit-scrollbar-thumb:hover {
+  background: var(--primary);
+}
+
+.pink::-webkit-scrollbar-thumb {
+  background: #d69ade;
+  border-color: var(--background);
+}
+
+.pink::-webkit-scrollbar-thumb:hover {
+  background: #aa60c8;
 }
