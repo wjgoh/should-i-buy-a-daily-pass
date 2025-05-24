@@ -3,6 +3,7 @@
 import { useState, useEffect } from "react";
 import { Train, Check, ChevronsUpDown, ClipboardCopy } from "lucide-react";
 import { toast } from "sonner";
+import { stationToasts } from "@/components/ui/toast-provider";
 import { Button } from "@/components/ui/button";
 import {
   Card,
@@ -261,9 +262,20 @@ export function TrainFareCalculator({
       setIsLoading(false);
     }
   };
-
   // Ensure onSubmit uses the explicit FormValues type
   async function onSubmit(values: FormValues) {
+    // Check if origin and destination are selected
+    if (!values.origin && !values.destination) {
+      stationToasts.selectStation();
+      return;
+    } else if (!values.origin) {
+      stationToasts.originMissing();
+      return;
+    } else if (!values.destination) {
+      stationToasts.destinationMissing();
+      return;
+    }
+
     const originStation = stations.find((s) => s.code === values.origin);
     const destinationStation = stations.find(
       (s) => s.code === values.destination
