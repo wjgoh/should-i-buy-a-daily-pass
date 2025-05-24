@@ -2,6 +2,7 @@
 
 import { useState, useEffect } from "react";
 import { Train, Check, ChevronsUpDown, ClipboardCopy } from "lucide-react";
+import { toast } from "sonner";
 import { Button } from "@/components/ui/button";
 import {
   Card,
@@ -171,8 +172,6 @@ export function TrainFareCalculator({
   const [fareResult, setFareResult] = useState<FareResult | null>(null);
   const [isLoading, setIsLoading] = useState<boolean>(false);
   const [error, setError] = useState<string | null>(null);
-  const [showShareNotification, setShowShareNotification] =
-    useState<boolean>(false);
 
   const [originOpen, setOriginOpen] = useState(false);
   const [destinationOpen, setDestinationOpen] = useState(false);
@@ -209,14 +208,15 @@ export function TrainFareCalculator({
     const url = generateShareURL();
     copyToClipboard(url);
   };
-
   // Function to copy URL to clipboard
   const copyToClipboard = (text: string) => {
     navigator.clipboard
       .writeText(text)
       .then(() => {
-        setShowShareNotification(true);
-        setTimeout(() => setShowShareNotification(false), 3000);
+        toast.success("URL copied to clipboard!", {
+          description: "Share this link to show this journey fare calculation.",
+          icon: <Check className="h-4 w-4" />,
+        });
       })
       .catch((err) => console.error("Failed to copy: ", err));
   };
@@ -557,21 +557,8 @@ export function TrainFareCalculator({
             </form>
           </Form>
         </CardContent>
-      </Card>
-
-      {/* Show notification when URL is copied */}
-      {showShareNotification && (
-        <Alert className="bg-green-50 dark:bg-green-900 border-green-200 dark:border-green-700">
-          <Check className="h-4 w-4 text-green-600 dark:text-green-400" />
-          <AlertTitle className="text-green-800 dark:text-green-400 font-medium">
-            URL copied to clipboard!
-          </AlertTitle>
-          <AlertDescription className="text-green-700 dark:text-green-300">
-            Share this link to show this journey fare calculation.
-          </AlertDescription>
-        </Alert>
-      )}
-
+      </Card>{" "}
+      {/* Toast will show when URL is copied */}
       {error && (
         <Card className="bg-red-50 dark:bg-red-950">
           <CardContent className="pt-6">
@@ -579,7 +566,6 @@ export function TrainFareCalculator({
           </CardContent>
         </Card>
       )}
-
       {fareResult && (
         <Card className="bg-card border">
           <CardHeader>
