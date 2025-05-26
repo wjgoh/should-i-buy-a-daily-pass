@@ -173,6 +173,7 @@ export function TrainFareCalculator({
   const [fareResult, setFareResult] = useState<FareResult | null>(null);
   const [isLoading, setIsLoading] = useState<boolean>(false);
   const [error, setError] = useState<string | null>(null);
+  const [isCopied, setIsCopied] = useState<boolean>(false);
 
   const [originOpen, setOriginOpen] = useState(false);
   const [destinationOpen, setDestinationOpen] = useState(false);
@@ -203,14 +204,15 @@ export function TrainFareCalculator({
     }?${params.toString()}`;
     return url;
   };
-
   // Function to handle copy button click
   const handleCopyClick = () => {
+    if (isCopied) return; // Prevent multiple clicks while copying
     const url = generateShareURL();
     copyToClipboard(url);
   };
   // Function to copy URL to clipboard
   const copyToClipboard = (text: string) => {
+    setIsCopied(true); // Disable the button immediately
     navigator.clipboard
       .writeText(text)
       .then(() => {
@@ -218,10 +220,17 @@ export function TrainFareCalculator({
           description: "Share this link to show this journey fare calculation.",
           icon: <Check className="h-4 w-4" />,
         });
-      })
-      .catch((err) => console.error("Failed to copy: ", err));
-  };
 
+        // Reset the icon after 2 seconds
+        setTimeout(() => {
+          setIsCopied(false);
+        }, 2000);
+      })
+      .catch((err) => {
+        console.error("Failed to copy: ", err);
+        setIsCopied(false);
+      });
+  };
   // Auto-calculate fare if both origin and destination are provided via URL params
   useEffect(() => {
     if (initialOrigin && initialDestination) {
@@ -233,7 +242,7 @@ export function TrainFareCalculator({
         form.handleSubmit(onSubmit)();
       }
     }
-  }, [initialOrigin, initialDestination]);
+  }, [initialOrigin, initialDestination, form, onSubmit]);
 
   // Function to fetch fares from RapidKL API
   const fetchFares = async (originCode: string, destinationCode: string) => {
@@ -552,17 +561,21 @@ export function TrainFareCalculator({
                   disabled={isLoading}
                 >
                   {isLoading ? "Calculating..." : "Calculate Fare"}
-                </Button>
-
+                </Button>{" "}
                 {fareResult && (
                   <Button
                     type="button"
                     variant="outline"
                     className="mt-6"
                     onClick={handleCopyClick}
-                    title="Copy URL to clipboard"
+                    disabled={isCopied}
+                    title={isCopied ? "Copied!" : "Copy URL to clipboard"}
                   >
-                    <ClipboardCopy className="h-4 w-4" />
+                    {isCopied ? (
+                      <Check className="h-4 w-4" />
+                    ) : (
+                      <ClipboardCopy className="h-4 w-4" />
+                    )}
                   </Button>
                 )}
               </div>
