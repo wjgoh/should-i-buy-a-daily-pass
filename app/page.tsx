@@ -3,12 +3,11 @@
 import { Suspense } from "react";
 import { ThemeToggle } from "@/components/theme-toggle";
 import TrainFareCalculatorWrapper from "../components/train-fare-calculator-wrapper";
-import { SiteFooter } from "./footer/site-footer";
 
 export default function Home() {
   return (
     <div className="flex flex-col min-h-screen bg-background">
-      <main className="p-4 md:p-6 lg:p-8 flex flex-col items-center flex-grow">
+      <main className="p-4 md:p-6 lg:p-8 pb-12 md:pb-15 lg:pb-20 flex flex-col items-center flex-grow">
         <div className="w-full max-w-md mx-auto">
           <div className="flex justify-between items-center mb-6">
             <h1 className="text-2xl font-bold">Should I buy daily pass?</h1>
@@ -25,7 +24,6 @@ export default function Home() {
           </Suspense>
         </div>
       </main>
-      <SiteFooter />
     </div>
   );
 }
