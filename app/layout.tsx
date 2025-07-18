@@ -5,6 +5,7 @@ import { Inter } from "next/font/google";
 import { ThemeProvider } from "@/components/theme-provider";
 import { ToastProvider } from "@/components/ui/toast-provider";
 import { SpeedInsights } from "@vercel/speed-insights/next";
+import { SiteFooter } from "@/app/footer/site-footer";
 
 const inter = Inter({ subsets: ["latin"] });
 
@@ -28,6 +29,7 @@ export default function RootLayout({
           disableTransitionOnChange
         >
           {children}
+          <SiteFooter />
           <SpeedInsights />
           <ToastProvider />
         </ThemeProvider>
