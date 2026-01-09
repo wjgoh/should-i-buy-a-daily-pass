@@ -304,7 +304,7 @@ export function TrainFareCalculator({
         ? parseFloat(fares.consession || "0")
         : parseFloat(fares.cashless || "0");
 
-      const shouldBuyDailyPass = relevantFare > 6;
+      const shouldBuyDailyPass = relevantFare > 10;
 
       setFareResult({
         origin: originStation.name,
@@ -331,7 +331,7 @@ export function TrainFareCalculator({
             cashless: (parseFloat(prevResult.cashless) * 2).toFixed(2),
             concession: (parseFloat(prevResult.concession) * 2).toFixed(2),
             adult: (parseFloat(prevResult.adult) * 2).toFixed(2),
-            shouldBuyDailyPass: parseFloat(doubleFare) > 6,
+            shouldBuyDailyPass: parseFloat(doubleFare) > 10,
           };
         });
       }
@@ -646,7 +646,7 @@ export function TrainFareCalculator({
                   </AlertTitle>
                   <AlertDescription className="text-green-700 dark:text-green-300">
                     Your {fareResult.isConcession ? "concession" : "cashless"}{" "}
-                    fare exceeds RM 6.00. Consider purchasing a daily pass for
+                    fare exceeds RM 10.00. Consider purchasing a daily pass for
                     better value! (Malaysian only)
                   </AlertDescription>
                 </Alert>
