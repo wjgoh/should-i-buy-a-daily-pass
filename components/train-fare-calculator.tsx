@@ -254,7 +254,7 @@ export function TrainFareCalculator({
       const apiFriendlyDestinationCode = convertToBRTCode(destinationCode);
 
       const response = await fetch(
-        `https://jp.mapit.myrapid.com.my/endpoint/geoservice/fares?agency=rapidkl&from=${apiFriendlyOriginCode}&to=${apiFriendlyDestinationCode}`
+        `REDACTED?agency=rapidkl&from=${apiFriendlyOriginCode}&to=${apiFriendlyDestinationCode}`
       );
 
       if (!response.ok) {
