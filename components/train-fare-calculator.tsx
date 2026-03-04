@@ -254,7 +254,7 @@ export function TrainFareCalculator({
       const apiFriendlyDestinationCode = convertToBRTCode(destinationCode);
 
       const response = await fetch(
-        `REDACTED?agency=rapidkl&from=${apiFriendlyOriginCode}&to=${apiFriendlyDestinationCode}`
+        `REDACTED?agency=rapidkl&from=${apiFriendlyOriginCode}&to=${apiFriendlyDestinationCode}`,
       );
 
       if (!response.ok) {
@@ -287,7 +287,7 @@ export function TrainFareCalculator({
 
     const originStation = stations.find((s) => s.code === values.origin);
     const destinationStation = stations.find(
-      (s) => s.code === values.destination
+      (s) => s.code === values.destination,
     );
 
     if (!originStation || !destinationStation) {
@@ -368,7 +368,7 @@ export function TrainFareCalculator({
                           >
                             {field.value
                               ? stations.find(
-                                  (station) => station.code === field.value
+                                  (station) => station.code === field.value,
                                 )?.name || "Select station..."
                               : "Select origin station..."}
                             <ChevronsUpDown className="ml-2 h-4 w-4 shrink-0 opacity-50" />
@@ -403,7 +403,7 @@ export function TrainFareCalculator({
                                       variant="secondary"
                                       className={cn(
                                         "text-xs font-normal text-white",
-                                        getTrainType(station.code).color
+                                        getTrainType(station.code).color,
                                       )}
                                     >
                                       {getTrainType(station.code).type}
@@ -414,7 +414,7 @@ export function TrainFareCalculator({
                                       "ml-2 h-4 w-4",
                                       field.value === station.code
                                         ? "opacity-100"
-                                        : "opacity-0"
+                                        : "opacity-0",
                                     )}
                                   />
                                 </CommandItem>
@@ -449,7 +449,7 @@ export function TrainFareCalculator({
                           >
                             {field.value
                               ? stations.find(
-                                  (station) => station.code === field.value
+                                  (station) => station.code === field.value,
                                 )?.name || "Select station..."
                               : "Select destination station..."}
                             <ChevronsUpDown className="ml-2 h-4 w-4 shrink-0 opacity-50" />
@@ -484,7 +484,7 @@ export function TrainFareCalculator({
                                       variant="secondary"
                                       className={cn(
                                         "text-xs font-normal text-white",
-                                        getTrainType(station.code).color
+                                        getTrainType(station.code).color,
                                       )}
                                     >
                                       {getTrainType(station.code).type}
@@ -495,7 +495,7 @@ export function TrainFareCalculator({
                                       "ml-2 h-4 w-4",
                                       field.value === station.code
                                         ? "opacity-100"
-                                        : "opacity-0"
+                                        : "opacity-0",
                                     )}
                                   />
                                 </CommandItem>
