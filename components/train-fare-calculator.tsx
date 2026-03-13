@@ -254,7 +254,7 @@ export function TrainFareCalculator({
       const apiFriendlyDestinationCode = convertToBRTCode(destinationCode);
 
       const response = await fetch(
-        `REDACTED?agency=rapidkl&from=${apiFriendlyOriginCode}&to=${apiFriendlyDestinationCode}`,
+        `/api/fare-proxy?from=${apiFriendlyOriginCode}&to=${apiFriendlyDestinationCode}`,
       );
 
       if (!response.ok) {
