@@ -165,4 +165,20 @@ USJ 21,KJ34,5Kelana Jaya Line,Rapid Rail,LRT
 USJ 7,KJ31,5Kelana Jaya Line,Rapid Rail,LRT
 USJ 7,SB7,B1BRT Sunway Line,Rapid Bus,BRT
 Wangsa Maju,KJ3,5Kelana Jaya Line,Rapid Rail,LRT
-Wawasan,KJ33,5Kelana Jaya Line,Rapid Rail,LRT`;
+Wawasan,KJ33,5Kelana Jaya Line,Rapid Rail,LRT
+Bandar Utama,SA1,11Shah Alam Line,Rapid Rail,LRT
+Kayu Ara,SA2,11Shah Alam Line,Rapid Rail,LRT
+Damansara Idaman,SA5,11Shah Alam Line,Rapid Rail,LRT
+Kerjaya,SA9,11Shah Alam Line,Rapid Rail,LRT
+Stadium Shah Alam,SA10,11Shah Alam Line,Rapid Rail,LRT
+Dato' Menteri - SA Sentral (PKNS),SA12,11Shah Alam Line,Rapid Rail,LRT
+UiTM Shah Alam,SA14,11Shah Alam Line,Rapid Rail,LRT
+Bandar Baru Klang,SA17,11Shah Alam Line,Rapid Rail,LRT
+Pasar Klang,SA18,11Shah Alam Line,Rapid Rail,LRT
+Jalan Meru,SA19,11Shah Alam Line,Rapid Rail,LRT
+Jambatan Kota,SA20,11Shah Alam Line,Rapid Rail,LRT
+Taman Selatan,SA21,11Shah Alam Line,Rapid Rail,LRT
+Seri Andalas,SA22,11Shah Alam Line,Rapid Rail,LRT
+Klang Jaya,SA23,11Shah Alam Line,Rapid Rail,LRT
+Bandar Bukit Tinggi,SA24,11Shah Alam Line,Rapid Rail,LRT
+Johan Setia,SA26,11Shah Alam Line,Rapid Rail,LRT`;
