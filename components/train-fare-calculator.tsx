@@ -1,6 +1,6 @@
 "use client";
 
-import { useState, useEffect } from "react";
+import { useState, useEffect, useRef } from "react";
 import { Train, Check, ChevronsUpDown, ClipboardCopy } from "lucide-react";
 import { toast } from "sonner";
 import { stationToasts } from "@/components/ui/toast-provider";
@@ -101,8 +101,8 @@ const getTrainType = (code: string) => {
       return { type: "MRT", color: "bg-green-800 hover:bg-green-900" }; // Kajang Line (9): #006600 (Dark Green)
     case "PY":
       return { type: "MRT", color: "bg-yellow-300 hover:bg-yellow-400" }; // Putrajaya Line (12): #FFFF00 (Yellow)
-    case "SH":
-      return { type: "LRT", color: "bg-cyan-500 hover:bg-cyan-600" }; // Shah Alam Line (11): #33CCCC (Light Blue)
+    case "SA":
+      return { type: "LRT", color: "bg-[#59b8e6] hover:bg-[#4ea5d0]" }; // Shah Alam Line (11): #59b8e6 (Light Blue)
     case "SB":
       return { type: "BRT", color: "bg-emerald-900 hover:bg-emerald-950" }; // BRT Sunway Line: #005522 (Dark Green)
     default:
@@ -232,6 +232,8 @@ export function TrainFareCalculator({
       });
   };
   // Auto-calculate fare if both origin and destination are provided via URL params
+  const onSubmitRef = useRef(onSubmit);
+  onSubmitRef.current = onSubmit;
   useEffect(() => {
     if (initialOrigin && initialDestination) {
       // Validate that the station codes exist
@@ -239,10 +241,11 @@ export function TrainFareCalculator({
       const destValid = stations.some((s) => s.code === initialDestination);
 
       if (originValid && destValid) {
-        form.handleSubmit(onSubmit)();
+        form.handleSubmit(onSubmitRef.current)();
       }
     }
-  }, [initialOrigin, initialDestination, form, onSubmit]);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [initialOrigin, initialDestination]);
 
   // Function to fetch fares from RapidKL API
   const fetchFares = async (originCode: string, destinationCode: string) => {
@@ -521,7 +524,10 @@ export function TrainFareCalculator({
                         onCheckedChange={field.onChange}
                       />
                     </FormControl>
-                    <div className="space-y-1 leading-none">
+                    <div
+                      className="space-y-1 leading-none cursor-pointer"
+                      onClick={() => field.onChange(!field.value)}
+                    >
                       <FormLabel>Return</FormLabel>
                       <FormDescription>
                         Select this option if you need a return ticket (doubles
@@ -543,7 +549,10 @@ export function TrainFareCalculator({
                         onCheckedChange={field.onChange}
                       />
                     </FormControl>
-                    <div className="space-y-1 leading-none">
+                    <div
+                      className="space-y-1 leading-none cursor-pointer"
+                      onClick={() => field.onChange(!field.value)}
+                    >
                       <FormLabel>I have a concession card</FormLabel>
                       <FormDescription>
                         Select if you&apos;re eligible for concession fare
