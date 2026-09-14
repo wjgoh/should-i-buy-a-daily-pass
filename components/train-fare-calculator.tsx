@@ -640,21 +640,8 @@ export function TrainFareCalculator({
                 <Alert className="bg-amber-50 dark:bg-amber-950 border-amber-200 dark:border-amber-800">
                   <TriangleAlert className="h-4 w-4 text-amber-600 dark:text-amber-400" />
                   <AlertTitle className="text-amber-800 dark:text-amber-300 font-medium">
-                    These fares might be outdated
+                    Saved fares — may be outdated
                   </AlertTitle>
-                  <AlertDescription className="text-amber-700 dark:text-amber-400">
-                    Saved
-                    {fareResult.fetchedAt
-                      ? ` on ${new Date(
-                          fareResult.fetchedAt,
-                        ).toLocaleDateString(undefined, {
-                          year: "numeric",
-                          month: "short",
-                          day: "numeric",
-                        })}`
-                      : ""}
-                    {" "}— prices may have changed since then.
-                  </AlertDescription>
                 </Alert>
               )}
               <div className="flex justify-between">
