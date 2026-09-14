@@ -303,8 +303,10 @@ export function TrainFareCalculator({
 
     if (fares) {
       // Determine which fare to use for daily pass calculation based on concession toggle
+      // Note: the live API spells it "consession" (typo); the backup normalizes to "concession".
+      const concessionFare = fares.concession ?? fares.consession ?? "0";
       const relevantFare = values.concession
-        ? parseFloat(fares.consession || "0")
+        ? parseFloat(concessionFare || "0")
         : parseFloat(fares.cashless || "0");
 
       const shouldBuyDailyPass = relevantFare > 10;
@@ -317,7 +319,7 @@ export function TrainFareCalculator({
         adult: fares.adult || "N/A",
         cash: fares.cash || "N/A",
         cashless: fares.cashless || "N/A",
-        concession: fares.consession || "N/A", // Note the API uses "consession" instead of "concession"
+        concession: fares.concession ?? fares.consession ?? "N/A",
         shouldBuyDailyPass: shouldBuyDailyPass,
       });
 

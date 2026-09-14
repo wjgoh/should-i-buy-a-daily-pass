@@ -6,7 +6,9 @@
     "dev": "next dev --turbopack",
     "build": "next build",
     "start": "next start",
-    "lint": "next lint"
+    "lint": "next lint",
+    "backup:fares": "node scripts/fetch-fares-backup.mjs",
+    "backup:fares:sample": "node scripts/fetch-fares-backup.mjs --limit 20 --out-dir data-sample"
   },
   "dependencies": {
     "@hookform/resolvers": "^5.0.1",
