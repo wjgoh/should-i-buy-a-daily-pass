@@ -640,13 +640,13 @@ export function TrainFareCalculator({
                 <Alert className="bg-amber-50 dark:bg-amber-950 border-amber-200 dark:border-amber-800">
                   <TriangleAlert className="h-4 w-4 text-amber-600 dark:text-amber-400" />
                   <AlertTitle className="text-amber-800 dark:text-amber-300 font-medium">
-                    Showing saved local fares
+                    Heads up: these fares might be outdated
                   </AlertTitle>
                   <AlertDescription className="text-amber-700 dark:text-amber-400">
-                    The live RapidKL API is unreachable, so these fares come
-                    from a local backup
+                    We couldn&apos;t reach RapidKL right now, so these prices
+                    come from a copy we saved
                     {fareResult.fetchedAt
-                      ? ` saved on ${new Date(
+                      ? ` on ${new Date(
                           fareResult.fetchedAt,
                         ).toLocaleDateString(undefined, {
                           year: "numeric",
@@ -654,8 +654,8 @@ export function TrainFareCalculator({
                           day: "numeric",
                         })}`
                       : ""}
-                    {" "}and may be inaccurate. Please double-check before
-                    travelling.
+                    . Prices may have changed since then, so please double-check
+                    before you travel.
                   </AlertDescription>
                 </Alert>
               )}
@@ -713,7 +713,7 @@ export function TrainFareCalculator({
           </CardContent>
           <CardFooter className="text-xs text-muted-foreground">
             {fareResult.source === "backup"
-              ? "Fares come from a saved local backup and may differ from current RapidKL rates. Return tickets are calculated as double the one-way fare."
+              ? "These prices are from a copy we saved earlier and might differ from today's RapidKL prices. Return tickets are calculated as double the one-way fare."
               : "Fares are based on RapidKL official rates. Return tickets are calculated as double the one-way fare."}
           </CardFooter>
         </Card>
