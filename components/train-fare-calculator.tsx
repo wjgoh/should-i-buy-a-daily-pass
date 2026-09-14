@@ -640,11 +640,10 @@ export function TrainFareCalculator({
                 <Alert className="bg-amber-50 dark:bg-amber-950 border-amber-200 dark:border-amber-800">
                   <TriangleAlert className="h-4 w-4 text-amber-600 dark:text-amber-400" />
                   <AlertTitle className="text-amber-800 dark:text-amber-300 font-medium">
-                    Heads up: these fares might be outdated
+                    These fares might be outdated
                   </AlertTitle>
                   <AlertDescription className="text-amber-700 dark:text-amber-400">
-                    We couldn&apos;t reach RapidKL right now, so these prices
-                    come from a copy we saved
+                    Saved
                     {fareResult.fetchedAt
                       ? ` on ${new Date(
                           fareResult.fetchedAt,
@@ -654,8 +653,7 @@ export function TrainFareCalculator({
                           day: "numeric",
                         })}`
                       : ""}
-                    . Prices may have changed since then, so please double-check
-                    before you travel.
+                    {" "}— prices may have changed since then.
                   </AlertDescription>
                 </Alert>
               )}
