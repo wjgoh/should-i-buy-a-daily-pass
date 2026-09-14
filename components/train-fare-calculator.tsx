@@ -1,7 +1,14 @@
 "use client";
 
 import { useState, useEffect, useRef } from "react";
-import { Train, Check, ChevronsUpDown, ClipboardCopy } from "lucide-react";
+import {
+  Train,
+  Check,
+  ChevronsUpDown,
+  ClipboardCopy,
+  AlertCircle,
+  TriangleAlert,
+} from "lucide-react";
 import { toast } from "sonner";
 import { stationToasts } from "@/components/ui/toast-provider";
 import { Button } from "@/components/ui/button";
@@ -28,7 +35,6 @@ import * as z from "zod";
 import { Resolver } from "react-hook-form"; // Add this import
 import { Checkbox } from "@/components/ui/checkbox";
 import { Alert, AlertDescription, AlertTitle } from "@/components/ui/alert";
-import { AlertCircle } from "lucide-react";
 import { Badge } from "@/components/ui/badge"; // Import Badge component
 
 import {
@@ -146,6 +152,8 @@ interface FareResult {
   cashless: string;
   concession: string;
   shouldBuyDailyPass?: boolean;
+  source: "live" | "backup";
+  fetchedAt?: string | null;
 }
 
 // Define the form values type explicitly
@@ -247,8 +255,17 @@ export function TrainFareCalculator({
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [initialOrigin, initialDestination]);
 
-  // Function to fetch fares from RapidKL API
-  const fetchFares = async (originCode: string, destinationCode: string) => {
+  // Function to fetch fares from RapidKL API (falls back to local backup server-side)
+  interface FareFetchResult {
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
+    fares: any;
+    source: "live" | "backup";
+    fetchedAt: string | null;
+  }
+  const fetchFares = async (
+    originCode: string,
+    destinationCode: string,
+  ): Promise<FareFetchResult | null> => {
     setIsLoading(true);
     setError(null);
     try {
@@ -265,7 +282,11 @@ export function TrainFareCalculator({
       }
 
       const data = await response.json();
-      return data.fares;
+      return {
+        fares: data.fares,
+        source: data._source === "backup" ? "backup" : "live",
+        fetchedAt: data._fetched_at ?? null,
+      };
     } catch (error) {
       setError("Failed to fetch fare data. Please try again.");
       console.error("Error fetching fares:", error);
@@ -299,9 +320,10 @@ export function TrainFareCalculator({
     }
 
     // Fetch fare data from API
-    const fares = await fetchFares(originStation.code, destinationStation.code);
+    const result = await fetchFares(originStation.code, destinationStation.code);
 
-    if (fares) {
+    if (result) {
+      const fares = result.fares;
       // Determine which fare to use for daily pass calculation based on concession toggle
       // Note: the live API spells it "consession" (typo); the backup normalizes to "concession".
       const concessionFare = fares.concession ?? fares.consession ?? "0";
@@ -321,6 +343,8 @@ export function TrainFareCalculator({
         cashless: fares.cashless || "N/A",
         concession: fares.concession ?? fares.consession ?? "N/A",
         shouldBuyDailyPass: shouldBuyDailyPass,
+        source: result.source,
+        fetchedAt: result.fetchedAt,
       });
 
       // If return journey, update with doubled values
@@ -612,6 +636,29 @@ export function TrainFareCalculator({
           </CardHeader>
           <CardContent className="pt-6">
             <div className="space-y-5">
+              {fareResult.source === "backup" && (
+                <Alert className="bg-amber-50 dark:bg-amber-950 border-amber-200 dark:border-amber-800">
+                  <TriangleAlert className="h-4 w-4 text-amber-600 dark:text-amber-400" />
+                  <AlertTitle className="text-amber-800 dark:text-amber-300 font-medium">
+                    Showing saved local fares
+                  </AlertTitle>
+                  <AlertDescription className="text-amber-700 dark:text-amber-400">
+                    The live RapidKL API is unreachable, so these fares come
+                    from a local backup
+                    {fareResult.fetchedAt
+                      ? ` saved on ${new Date(
+                          fareResult.fetchedAt,
+                        ).toLocaleDateString(undefined, {
+                          year: "numeric",
+                          month: "short",
+                          day: "numeric",
+                        })}`
+                      : ""}
+                    {" "}and may be inaccurate. Please double-check before
+                    travelling.
+                  </AlertDescription>
+                </Alert>
+              )}
               <div className="flex justify-between">
                 <span className="text-muted-foreground">Journey:</span>
                 <span className="font-medium">
@@ -665,8 +712,9 @@ export function TrainFareCalculator({
             </div>
           </CardContent>
           <CardFooter className="text-xs text-muted-foreground">
-            Fares are based on RapidKL official rates. Return tickets are
-            calculated as double the one-way fare.
+            {fareResult.source === "backup"
+              ? "Fares come from a saved local backup and may differ from current RapidKL rates. Return tickets are calculated as double the one-way fare."
+              : "Fares are based on RapidKL official rates. Return tickets are calculated as double the one-way fare."}
           </CardFooter>
         </Card>
       )}
